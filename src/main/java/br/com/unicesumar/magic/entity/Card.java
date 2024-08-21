@@ -21,12 +21,15 @@ public class Card {
 
     private String name;
 
+    private String type_line;
+
+    private String colors;
+
     private CardType cardType;
 
-    private Legalities legalities;
 
     public void setCardType(){
-        if(legalities.getCommander().equals("legal")){
+        if(this.type_line.equals("Legendary Creature")){
             this.cardType = CardType.COMMANDER;
         }else {
             this.cardType = CardType.COMMON;
