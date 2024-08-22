@@ -37,7 +37,7 @@ public class CardController {
 
         if(retorno.getCardType().equals(CardType.COMMANDER)){
             retorno.setResponse("Carta Adicionada com sucesso");
-            cardRepository.save(retorno);
+            //cardRepository.save(retorno);
             deck = new Deck();
             this.deck.setCommander(retorno);
             this.deck.setCards(cardService.getCommonCard());
