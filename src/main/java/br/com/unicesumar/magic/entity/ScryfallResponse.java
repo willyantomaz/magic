@@ -9,6 +9,4 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ScryfallResponse {
     private List<Card> data;
-
-    // Getters and setters
 }

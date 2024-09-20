@@ -4,17 +4,12 @@ import br.com.unicesumar.magic.entity.Card;
 import br.com.unicesumar.magic.entity.Deck;
 import br.com.unicesumar.magic.enums.CardType;
 import br.com.unicesumar.magic.repository.CardRepository;
-import br.com.unicesumar.magic.repository.DeckRepository;
 import br.com.unicesumar.magic.service.CardService;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
+import br.com.unicesumar.magic.service.DeckService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,15 +22,11 @@ public class CardController {
     private CardService cardService;
 
     @Autowired
-    private CardRepository cardRepository;
-
-    @Autowired
-    private DeckRepository deckRepository;
+    private DeckService deckService;
 
     private Deck deck;
 
     @GetMapping("/commander")
-
     public ResponseEntity getCommander(@RequestBody Card name, @RequestParam int qntdCard) {
 
         Card retorno = cardService.getCommanderCard(name.getName());
@@ -46,7 +37,7 @@ public class CardController {
             this.deck.setCommander(retorno);
             this.deck.setCards(cardService.getCommonCard(qntdCard, retorno.getColors()));
 
-            deckRepository.save(this.deck);
+            deckService.saveDeck(this.deck);
             saveCardsToFile(this.deck, "src/main/resources/deck.json");
             retorno.setResponse("Carta Adicionada com sucesso");
 
