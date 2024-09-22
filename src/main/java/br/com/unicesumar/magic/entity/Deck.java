@@ -13,7 +13,7 @@ import java.util.List;
 @Document(collection = "deck")
 public class Deck {
 
-    private Long userId;
+    private String user;
 
     private Card commander;
 

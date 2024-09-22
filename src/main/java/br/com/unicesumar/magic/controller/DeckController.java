@@ -4,9 +4,7 @@ import br.com.unicesumar.magic.entity.Deck;
 import br.com.unicesumar.magic.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,8 @@ public class DeckController {
         return ResponseEntity.ok(this.deckService.findAllDecks());
     }
 
-
+    @GetMapping("/user")
+    public ResponseEntity<List<Deck>> getDecksByUser(@RequestHeader String Authorization) {
+        return ResponseEntity.ok(this.deckService.findDecksByUser(Authorization));
+    }
 }

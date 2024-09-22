@@ -1,5 +1,6 @@
 package br.com.unicesumar.magic.service;
 
+import br.com.unicesumar.magic.dto.DeckCreatorDTO;
 import br.com.unicesumar.magic.entity.Card;
 import br.com.unicesumar.magic.entity.Deck;
 import br.com.unicesumar.magic.entity.ScryfallResponse;
@@ -22,6 +23,8 @@ public class CardService {
 
     @Autowired
     private DeckService deckService;
+    @Autowired
+    private JwtTokenService jwtTokenService;
 
     private final String API_URL = "https://api.scryfall.com/cards";
     private final String API_URL_NAMED = "/named?fuzzy=";
@@ -64,15 +67,16 @@ public class CardService {
         }
     }
 
-    public ResponseEntity<Card> getCommander(Card name, Integer qntdCard) {
-        Card retorno = this.getCommanderCard(name.getName());
+    public ResponseEntity<Card> getCommander(DeckCreatorDTO creatorDTO, Integer qntdCard, String token) {
+        Card retorno = this.getCommanderCard(creatorDTO.getCommanderName());
 
         if (retorno.getCardType().equals(CardType.COMMANDER)) {
             Deck deck = new Deck();
             deck.setCommander(retorno);
             deck.setCards(this.getCommonCard(qntdCard, retorno.getColors()));
+            deck.setUser(this.jwtTokenService.getUserByToken(token.replace("Bearer ", "")));
 
-            deckService.saveDeck(deck);
+            this.deckService.saveDeck(deck);
             saveCardsToFile(deck, "src/main/resources/deck.json");
             retorno.setResponse("Carta Adicionada com sucesso");
 

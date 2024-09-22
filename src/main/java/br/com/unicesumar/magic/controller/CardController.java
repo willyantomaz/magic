@@ -1,5 +1,6 @@
 package br.com.unicesumar.magic.controller;
 
+import br.com.unicesumar.magic.dto.DeckCreatorDTO;
 import br.com.unicesumar.magic.entity.Card;
 import br.com.unicesumar.magic.entity.Deck;
 import br.com.unicesumar.magic.enums.CardType;
@@ -22,7 +23,7 @@ public class CardController {
     private CardService cardService;
 
     @PostMapping("/commander")
-    public ResponseEntity getCommander(@RequestBody Card name, @RequestParam int qntdCard) {
-        return ResponseEntity.ok(this.cardService.getCommander(name, qntdCard));
+    public ResponseEntity getCommander(@RequestBody DeckCreatorDTO creatorDTO, @RequestParam int qntdCard, @RequestHeader String Authorization) {
+        return ResponseEntity.ok(this.cardService.getCommander(creatorDTO, qntdCard, Authorization));
     }
 }
