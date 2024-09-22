@@ -13,6 +13,8 @@ import java.util.List;
 @Document(collection = "deck")
 public class Deck {
 
+    private String user;
+
     private Card commander;
 
     private List<Card> cards;

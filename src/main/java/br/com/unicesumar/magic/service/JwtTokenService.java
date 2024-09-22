@@ -32,7 +32,7 @@ public class JwtTokenService {
             }
         }
 
-        public String validateToken(String token){
+        public String getUserByToken(String token){
             try {
                 Algorithm algorithm = Algorithm.HMAC256(secret);
                 return JWT.require(algorithm)
@@ -41,7 +41,7 @@ public class JwtTokenService {
                         .verify(token)
                         .getSubject();
             } catch (JWTVerificationException exception){
-                return "";
+                throw exception;
             }
         }
 

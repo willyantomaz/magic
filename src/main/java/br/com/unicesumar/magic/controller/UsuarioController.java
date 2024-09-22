@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class UsuarioController {
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -50,6 +49,5 @@ public class UsuarioController {
 
         return ResponseEntity.ok().build();
     }
-
-    }
+}
 

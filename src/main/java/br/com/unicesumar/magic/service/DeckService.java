@@ -12,9 +12,15 @@ public class DeckService {
 
     @Autowired
     private DeckRepository deckRepository;
+    @Autowired
+    private JwtTokenService jwtTokenService;
 
     public Deck saveDeck (Deck deck) {
         return this.deckRepository.save(deck);
+    }
+
+    public List<Deck> findDecksByUser (String token) {
+        return this.deckRepository.findDeckByUser(this.jwtTokenService.getUserByToken(token.replace("Bearer ", "")));
     }
 
     public List<Deck> findAllDecks () {
