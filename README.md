@@ -24,7 +24,7 @@ Para configurar o projeto localmente, siga as etapas abaixo:
 
 1. Clone o repositório:
    ```bash
-   git clone https://seu-repositorio.git
+   git clone https://github.com/willyantomaz/magic
    ```
 
 2. Acesse o diretório do projeto:
