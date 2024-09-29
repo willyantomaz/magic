@@ -47,11 +47,6 @@ public class DeckService {
         }
 
 
-//        if (deckDTO.getCards().size() != 100) {
-//            throw new RuntimeException("O deck de Commander deve ter exatamente 100 cartas.");
-//        }
-
-
         if (!areColorsConsistent(deckDTO.getCommander().getColors(), deckDTO.getCards())) {
             throw new RuntimeException("As cores das cartas não são consistentes com o comandante.");
         }
