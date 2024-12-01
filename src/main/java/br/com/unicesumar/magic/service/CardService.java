@@ -25,6 +25,8 @@ public class CardService {
     private DeckService deckService;
     @Autowired
     private JwtTokenService jwtTokenService;
+    @Autowired
+    private ProducerService producerService;
 
     private final String API_URL = "https://api.scryfall.com/cards";
     private final String API_URL_NAMED = "/named?fuzzy=";
@@ -76,13 +78,17 @@ public class CardService {
             deck.setCards(this.getCommonCard(qntdCard, retorno.getColors()));
             deck.setUser(this.jwtTokenService.getUserByToken(token.replace("Bearer ", "")));
 
-            this.deckService.saveDeck(deck);
+            Deck savedDeck =  this.deckService.saveDeck(deck);
             saveCardsToFile(deck, "src/main/resources/deck.json");
             retorno.setResponse("Carta Adicionada com sucesso");
 
+            String message = "Novo deck criado com a cor do comandante: " + retorno.getColors().toString() + "e ID: " + savedDeck.getId();
+            producerService.sendNotification(message);
+
             return ResponseEntity.ok(retorno);
         }
-        retorno.setResponse("Essa carta não pode ser Commander");
+        retorno.setResponse("A carta "+ creatorDTO.getCommanderName() + " não pode ser Commander");
+        producerService.sendNotification(retorno.getResponse());
         return ResponseEntity.badRequest().body(retorno);
     }
 
@@ -90,10 +96,10 @@ public class CardService {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.writeValue(new File(filePath), deck);
-            System.out.println("Cartas salvas com sucesso em " + filePath);
+            producerService.sendNotification("Cartas salvas com sucesso em " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Erro ao salvar cartas em arquivo JSON");
+            producerService.sendNotification("Erro ao salvar cartas em arquivo JSON");
         }
     }
 }
