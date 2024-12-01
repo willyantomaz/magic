@@ -31,7 +31,7 @@ public class    DeckController {
     public ResponseEntity<String> importDeck(@RequestBody DeckDTO deckDTO) {
         try {
             deckService.validateAndImportDeck(deckDTO);
-            return ResponseEntity.ok("Deck imported successfully for user " + deckDTO.getUser());
+            return ResponseEntity.ok("Deck imported successfully for user " + deckDTO);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

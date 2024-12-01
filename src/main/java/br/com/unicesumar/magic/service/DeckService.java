@@ -7,6 +7,7 @@ import br.com.unicesumar.magic.entity.Usuario;
 import br.com.unicesumar.magic.repository.DeckRepository;
 import br.com.unicesumar.magic.repository.UsuarioRepository;
 import org.apache.catalina.User;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class DeckService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    NotificationWorkerService notificationWorkerService;
+
+
     public Deck saveDeck (Deck deck) {
         return this.deckRepository.save(deck);
     }
@@ -40,16 +45,18 @@ public class DeckService {
         return this.deckRepository.findAll();
     }
 
+    @RabbitListener(queues = "deck_import_queue")
     public void validateAndImportDeck(DeckDTO deckDTO) {
-
+        notificationWorkerService.notifyDeckUpdate(
+                "importação iniciada");
         if (!isValidCommander(deckDTO.getCommander())) {
             throw new RuntimeException("Comandante inválido.");
         }
 
 
-        if (!areColorsConsistent(deckDTO.getCommander().getColors(), deckDTO.getCards())) {
-            throw new RuntimeException("As cores das cartas não são consistentes com o comandante.");
-        }
+//        if (!areColorsConsistent(deckDTO.getCommander().getColors(), deckDTO.getCards())) {
+//            throw new RuntimeException("As cores das cartas não são consistentes com o comandante.");
+//        }
 
 
         Usuario user = usuarioRepository.findUserByLogin(deckDTO.getUser())
@@ -62,6 +69,10 @@ public class DeckService {
         deck.setUser(String.valueOf(user));
 
         deckRepository.save(deck);
+        notificationWorkerService.notifyDeckUpdate(
+                "O baralho " + deckDTO + " foi importado com sucesso!");
+
+
     }
 
     private boolean isValidCommander(Card commander) {
