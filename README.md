@@ -37,12 +37,17 @@ Para configurar o projeto localmente, siga as etapas abaixo:
    ./mvnw install
    ```
 
-4. Para rodar a aplicação, use o comando:
+4. Antes de rodar o projeto, execute o comando para subir o conteiner do RabbitMQ:
+   ```
+   docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
+   ```
+
+5. Para rodar a aplicação, use o comando:
    ```bash
    ./mvnw spring-boot:run
    ```
 
-5. O projeto estará acessível via:
+6. O projeto estará acessível via:
    ```
    http://localhost:8080
    ```
