@@ -67,3 +67,6 @@ Após iniciar a aplicação, você pode realizar as seguintes ações:
 - Criar usuários e realizar login via rotas de autenticação.
 - Adicionar e gerenciar cartas.
 - Criar decks personalizados e organizá-los com suas cartas.
+
+## Atualização - Mensageria
+Foi adicionado uma forma de notificação do status do processo de criação de importação dos decks, utilizando RabbitMQ
